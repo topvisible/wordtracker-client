@@ -1,0 +1,9 @@
+#! /usr/bin/env ruby
+
+if __FILE__ == $0
+  $:.unshift "#{File.dirname(__FILE__)}/../lib"
+end
+
+require 'wordtracker-client'
+
+puts (Wordtracker::Client.new(ENV['WORDTRACKER_ID'], ENV['WORDTRACKER_KEY']).fetch(ARGV[0]) || {}).volume
