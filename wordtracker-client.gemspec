@@ -11,7 +11,8 @@ Gem::Specification.new do |s|
   s.email       = 'dev@ranktrail.se'
   s.files       = Dir.glob('{bin,lib}/**/*.rb')
   s.homepage    = 'http://www.ranktrail.se/'
-  s.executables = ['wordtracker-fetch']
+  s.executables = ['wordtracker-fetch', 'wordtracker-pcb']
 
+  s.add_runtime_dependency 'redis', '~> 3.0.1'
   s.add_runtime_dependency 'faraday', '~> 0.8'
 end

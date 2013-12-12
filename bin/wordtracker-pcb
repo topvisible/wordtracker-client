@@ -1,0 +1,26 @@
+#! /usr/bin/env ruby
+
+#
+# You can generate a matching list of keyphrases by running the following
+# snippet in a Ranktrail console
+#
+#  irb > puts User.find(user_id).domains.map(&:keyphrases).flatten(1).map(&:text).to_json
+#
+
+if __FILE__ == $0
+  $:.unshift "#{File.dirname(__FILE__)}/../lib"
+end
+
+require 'redis'
+require 'wordtracker-client'
+
+country = ARGV[0]
+input = JSON.parse(File.read(ARGV[1]))
+
+redis = Redis.new(host: ENV.fetch('REDIS_HOST', 'localhost'), port: ENV.fetch('REDIS_PORT', 6379), password: ENV['REDIS_PASSWORD'])
+
+input.each_slice(200) do |slice|
+  Wordtracker::Client.new(ENV['WORDTRACKER_ID'], ENV['WORDTRACKER_KEY']).fetch(slice, country: country).map do |volume|
+    redis.set("wordtracker@#{volume.keyword}", volume.to_json)
+  end
+end

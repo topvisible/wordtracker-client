@@ -1,3 +1,5 @@
+require 'json'
+
 module Wordtracker
   class Wrapper
     def initialize(response)
@@ -6,6 +8,10 @@ module Wordtracker
       end
 
       @data = response
+    end
+
+    def to_json(*args)
+      @data.to_json(*args)
     end
 
     def inspect

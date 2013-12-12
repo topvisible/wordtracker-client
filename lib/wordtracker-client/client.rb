@@ -20,6 +20,10 @@ module Wordtracker
 
       response = @connection.get('/fetch', options.merge(input))
 
+      unless response.success?
+        raise StandardError.new("Server Responded with failure #{response.status}: #{response.body}")
+      end
+
       parsed = JSON.parse(response.body)
 
       if parsed['error']
